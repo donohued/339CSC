@@ -17,5 +17,4 @@ class Deck{
     protected:
         std::vector<Card*> deck;
         std::stack<Card*> shuffled;
-        void shuffleHelper(int splits);
 };

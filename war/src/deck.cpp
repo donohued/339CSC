@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <algorithm>
 #include <stack>
 
 #include "deck.h"
@@ -37,30 +38,8 @@ void Deck::shuffle(){
 
     std::shuffle(this->deck.begin(), this->deck.end(), rng);
 
-
-
-}
-
-void Deck::shuffleHelper(int splits){
-
-    for (int i = 0; i < splits; i++)
-    {
-        std::stack<Card*> splitDeck;
-        int cut = rand() % (this->deck.size() / 2) + 1;
-
-        for (int j = 0; j < cut; j++)
-        {
-            splitDeck.push(this->deck.back());
-            this->deck.pop_back();
-        }
-
-        int slip = rand() % (this->deck.size() / 2) + 1;
-        for (int k = splitDeck.size(); k > 0; k--)
-        {
-            this->deck.insert(this->deck.begin() + slip, splitDeck.top());
-            splitDeck.pop();
-        }
-        
+    for(int i = 0; i < this->deck.size(); i++){
+        this->shuffled.push(this->deck[i]);
     }
-    
+
 }
