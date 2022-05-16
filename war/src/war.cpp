@@ -5,32 +5,44 @@
 
 //TODO: make deck size a const?
 
-War::War(Deck &deck){
-    deck.shuffle();
+War::War(){
 
+    
+
+}
+
+War::~War(){
+
+}
+
+void War::Play(Deck &deck){
+
+    deck.shuffle();
     Deal(deck);
 
     std::cout << "You have " << this->playerDeck.size() << " cards." << std::endl;
     std::cout << "Your opponent has " << this->computerDeck.size() << " cards." << std::endl;
-    std::cout << "Press P to play a card and start the game." << std::endl;
+    std::cout << "Press P to play a card and start the game. (press A to autoplay until there is a winner)" << std::endl;
     std::string input;
     std::cin >> input;
 
-
     bool hasWon = false;
+    bool autoPlay = false;
     int battleValue;
     int rounds = 0;
 
-    if (input.compare("P") || input.compare("p"))
+    if (input.compare("P") == 0 || input.compare("p") == 0 || input.compare("A") == 0 || input.compare("a") == 0)
     {
-        
+        if(input.compare("A") == 0 || input.compare("a") == 0)
+            autoPlay = true;
+
         std::stack<Card*> pHand;
         std::stack<Card*> cHand;
         
         while(!hasWon){    
             
             rounds++;
-            std::cout << "So this is a longer string to see more easily during the auto run, but basically the score is: " << this->playerDeck.size() << " vs " << this->computerDeck.size() << std::endl;
+            //std::cout << "So this is a longer string to see more easily during the auto run, but basically the score is: " << this->playerDeck.size() << " vs " << this->computerDeck.size() << std::endl;
 
             pHand.push(this->playerDeck.back());
             this->playerDeck.pop_back();
@@ -48,9 +60,14 @@ War::War(Deck &deck){
             battleValue = pHand.top()->compareValue((Card)*cHand.top());
 
             while (battleValue == 0){
+
                 std::cout << "There was a war!!" << std::endl;
-                std::cout << "Press any key to continue" << std::endl;
-                std::cin >> input;
+
+                if(!autoPlay){
+                    
+                    std::cout << "Press any key to continue" << std::endl;
+                    std::cin >> input;
+                }
 
                 if (this->playerDeck.size() < 2 || this->computerDeck.size() < 2)
                 {
@@ -66,10 +83,10 @@ War::War(Deck &deck){
                     cHand.push(this->computerDeck.back());
                     this->computerDeck.pop_back();
 
-                    std::cout << "You play: ";
+                    std::cout << "Your top card: ";
                     pHand.top()->print();
 
-                    std::cout << "They play: ";
+                    std::cout << "Their top card: ";
                     cHand.top()->print();
 
                     battleValue = pHand.top()->compareValue((Card)*cHand.top());
@@ -113,13 +130,7 @@ War::War(Deck &deck){
                 std::cout << "You have: " << this->playerDeck.size() << " cards." << std::endl;                
                 std::cout << "The computer has: " << this->computerDeck.size() << " cards." << std::endl;
 
-                hasWon = GameOver(this->playerDeck.size(), this->computerDeck.size());
-                //choose to continue if not game over, otherwise... break???
-                std::cout << "Press P to play a card, press F to forfiet the game." << std::endl;
-                std::cin >> input;
-                if(input.compare("F") == 0 || input.compare("f") == 0){
-                    break;
-                }
+                
             }else if(battleValue > 0){
                 std::cout << "You have the high card." << std::endl;
 
@@ -133,10 +144,16 @@ War::War(Deck &deck){
                 std::cout << "You have: " << this->playerDeck.size() << " cards." << std::endl;                
                 std::cout << "The computer has: " << this->computerDeck.size() << " cards." << std::endl;
 
-                if(hasWon = GameOver(this->playerDeck.size(), this->computerDeck.size())){
-                    break;
-                }
-                //choose to continue if not game over, otherwise... break???
+                
+            }
+
+            if(hasWon = GameOver(this->playerDeck.size(), this->computerDeck.size())){
+                break;
+            }
+
+            //choose to continue if not game over, otherwise... break???
+
+            if(!autoPlay){
                 std::cout << "Press P to play a card, press F to forfiet the game." << std::endl;
                 std::cin >> input;
                 if(input.compare("F") == 0 || input.compare("f") == 0){
@@ -144,10 +161,10 @@ War::War(Deck &deck){
                 }
             }
             
-            
 
         }
     }
+
     if (hasWon)
     {
         //Output of winner here.
@@ -162,19 +179,14 @@ War::War(Deck &deck){
         std::cout << "The game has been forfeit with a score of " << this->playerDeck.size() <<" (you) to " << this->computerDeck.size() << " (cpu)." << std::endl;
     }
     
-    
-    
-
-
-}
-
-War::~War(){
-
 }
 
 
 
 void War::Deal(Deck &deck){
+
+    std::cout << "Dealing the deck..." << std::endl;
+
     int deckSize = ((Card::Suit::SPADE + 1) * (Card::Value::ACE + 1));
 
     for (int i = 0; i < deckSize/2; i++)

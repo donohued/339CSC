@@ -11,7 +11,9 @@ int main(int argc, char **argv)
     Deck deck;
     deck.shuffle();
     
-    War war(deck);
+    War game;
+
+    game.Play(deck);
 
     return 1;
 }

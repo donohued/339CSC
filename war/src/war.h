@@ -2,9 +2,10 @@
 
 class War{
     public:
-        War(Deck &deck);
+        War();
         ~War();
     public:
+        void Play(Deck &deck);
     protected:
         void Deal(Deck &deck);
         std::deque<Card*> playerDeck;
